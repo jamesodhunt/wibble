@@ -72,9 +72,15 @@ jobs:
 
           # PR doesn't have a linked issue
           # (it should, but maybe a new user forgot to add a "Fixes #" commit).
-          [ -z "$linked_issue_url" ] && \
-            echo "::error::No linked issue for PR $pr" && \
-            exit 1
+          if [ -z "$linked_issue_url" ]; then
+            echo "::error::No linked issue for PR $pr"
+            # XXX: Careful - this works for now (this step will be aborted.
+            # XXX: However, since this is exiting with success (as the linked
+            # XXX: PR condition was not met, which isn't an error), *iff* further
+            # XXX: steps are added to this action in future, they *will* be run as
+            # XXX: this steps ends with success!
+            exit 0
+          fi
 
           issue_number=$(echo "$linked_issue_url"| awk -F\/ '{print $NF}' || true)
           [ -z "$issue_number" ] && \
