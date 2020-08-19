@@ -34,7 +34,7 @@ jobs:
           DEBUG: true
         run: |
             issue=${{ github.event.number }}
-            project_name="Issue backlog"
+            project_name="top-level-project"
             project_type="org"
             project_column="To do"
 
