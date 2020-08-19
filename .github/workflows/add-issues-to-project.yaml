@@ -28,10 +28,16 @@ jobs:
           sudo install kata-hub.sh /usr/local/bin
           popd &>/dev/null
 
+      - uses: actions/checkout@v2
+
       - name: Add issue to issue backlog
         env:
           DEBUG: true
         run: |
+            # FIXME: DEBUG:
+            echo "::debug::GITHUB_WORKSPACE"
+            echo "$GITHUB_WORKSPACE"
+
             # FIXME: DEBUG:
             echo "::debug::PWD"
             pwd
