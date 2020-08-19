@@ -28,43 +28,43 @@ jobs:
           sudo install kata-hub.sh /usr/local/bin
           popd &>/dev/null
 
-      - uses: actions/checkout@v2
+      - name: Checkout code to allow hub to communicate with the project
+        uses: actions/checkout@v2
 
       - name: Add issue to issue backlog
         env:
-          DEBUG: true
+          xDEBUG: true
+          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
         run: |
             # FIXME: DEBUG:
-            echo "::debug::GITHUB_WORKSPACE"
-            echo "$GITHUB_WORKSPACE"
+            #echo "::debug::GITHUB_WORKSPACE"
+            #echo "$GITHUB_WORKSPACE"
 
             # FIXME: DEBUG:
-            echo "::debug::PWD"
-            pwd
-            ls -al
+            #echo "::debug::PWD"
+            #pwd
+            #ls -al
 
             # FIXME: DEBUG:
-            echo "::debug::hub"
-            command -v hub || true
+            #echo "::debug::hub"
+            #command -v hub || true
 
             # FIXME: DEBUG:
-            echo "::debug::/usr/local/bin:"
-            sudo ls -l /usr/local/bin || true
+            #echo "::debug::/usr/local/bin:"
+            #sudo ls -l /usr/local/bin || true
 
             # FIXME: DEBUG:
-            echo "::debug::issues"
-            hub issue || true
+            #echo "::debug::issues"
+            #hub issue || true
 
             issue=${{ github.event.issue.number }}
             project_name="top-level-project"
             project_type="org"
             project_column="To do"
 
-            GITHUB_TOKEN=${{ secrets.JODH_GITHUB_ACTION_TOKEN }} \
-              hub api -H 'accept: application/vnd.github.inertia-preview+json' -XGET 'orgs/{owner}/projects' -f state=open
+            #hub api -H 'accept: application/vnd.github.inertia-preview+json' -XGET 'orgs/{owner}/projects' -f state=open
 
-            GITHUB_TOKEN=${{ secrets.JODH_GITHUB_ACTION_TOKEN }} \
-              kata-hub.sh \
+            kata-hub.sh \
                 add-issue \
                 "$issue" \
                 "$project_name" \
