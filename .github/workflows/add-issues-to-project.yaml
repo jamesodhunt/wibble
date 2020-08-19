@@ -31,7 +31,7 @@ jobs:
       - name: Add issue to issue backlog
         env:
           DEBUG: true
-          GITHUB_TOKEN: ${{ JODH_GITHUB_ACTION_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
         run: |
             issue=${{ github.event.issue.number }}
             project_name="top-level-project"
