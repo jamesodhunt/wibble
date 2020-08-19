@@ -38,7 +38,7 @@ jobs:
             project_type="org"
             project_column="To do"
 
-            GITHUB_TOKEN="${{ secrets.MY_GITHUB_TOKEN }}" hub api -H 'accept: application/vnd.github.inertia-preview+json' -XGET 'orgs/{owner}/projects' -f state=open
+            GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }} hub api -H 'accept: application/vnd.github.inertia-preview+json' -XGET 'orgs/{owner}/projects' -f state=open
 
             kata-hub.sh \
               add-issue \
