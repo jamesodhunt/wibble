@@ -1,0 +1,14 @@
+name: Show "on issue" event details
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  show-on-issue-details:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show environment
+        run: |
+          set|sort
