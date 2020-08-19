@@ -33,7 +33,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
           DEBUG: true
         run: |
-            issue=${{ github.event.number }}
+            issue=${{ github.event.issue.number }}
             project_name="top-level-project"
             project_type="org"
             project_column="To do"
