@@ -41,6 +41,6 @@ jobs:
             kata-hub.sh \
               add-issue \
               "$issue" \
-              "project_name" \
+              "$project_name" \
               "$project_type" \
               "$project_column"
