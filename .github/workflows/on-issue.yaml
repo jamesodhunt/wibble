@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Show environment
         run: |
-          echo "::debug::jq version: $(jq --version)"
+          echo "::debug::jq version:"
+          jq --version
 
           echo "::debug::event repo slug: ${{ github.repository }}"
           echo "::debug::event repo owner: ${{ github.repository_owner }}"
