@@ -11,7 +11,9 @@ jobs:
     steps:
       - name: Show environment
         run: |
-          echo "::debug::Environment variables"
+          echo "::debug::Issue"
+          echo "::debug::${{ github.event.issue.number }}"
+
           set|sort
 
           echo "::debug::github context"
