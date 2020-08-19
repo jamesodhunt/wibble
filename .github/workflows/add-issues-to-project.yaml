@@ -39,16 +39,15 @@ jobs:
 
             # FIXME: DEBUG:
             echo "::debug::hub"
-            command -v hub
-            ls -l /usr/bin/hub
+            command -v hub || true
 
             # FIXME: DEBUG:
             echo "::debug::/usr/local/bin:"
-            sudo ls -l /usr/local/bin
+            sudo ls -l /usr/local/bin || true
 
             # FIXME: DEBUG:
             echo "::debug::issues"
-            hub issue
+            hub issue || true
 
             issue=${{ github.event.issue.number }}
             project_name="top-level-project"
