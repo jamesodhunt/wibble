@@ -23,15 +23,33 @@ jobs:
         run: |
           # Clone into a temporary directory to avoid overwriting
           # any existing github directory.
-          pushd $(mktemp -d)
+          pushd $(mktemp -d) &>/dev/null
           git clone --single-branch --depth 1 "https://github.com/jamesodhunt-org/.github" && cd .github/scripts
           sudo install kata-hub.sh /usr/local/bin
-          popd
+          popd &>/dev/null
 
       - name: Add issue to issue backlog
         env:
           DEBUG: true
         run: |
+            # FIXME: DEBUG:
+            echo "::debug::PWD"
+            pwd
+            ls -al
+
+            # FIXME: DEBUG:
+            echo "::debug::hub"
+            command -v hub
+            ls -l /usr/bin/hub
+
+            # FIXME: DEBUG:
+            echo "::debug::/usr/local/bin:"
+            sudo ls -l /usr/local/bin
+
+            # FIXME: DEBUG:
+            echo "::debug::issues"
+            hub issue
+
             issue=${{ github.event.issue.number }}
             project_name="top-level-project"
             project_type="org"
