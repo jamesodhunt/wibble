@@ -11,34 +11,34 @@ jobs:
     steps:
       - name: Show environment
         run: |
-          echo "::debug::Issue"
-          echo "::debug::${{ github.event.issue.number }}"
+          echo "::debug::Issue number: ${{ github.event.issue.number }}"
 
+          echo "::debug::Environment variables"
           set|sort
 
           echo "::debug::github context"
-          echo "::debug::${{ github }}"
+          echo "::debug::${{ toJson(github) }}"
 
           echo "::debug::env context"
-          echo "::debug::${{ env }}"
+          echo "::debug::${{ toJson(env) }}"
 
           echo "::debug::job context"
-          echo "::debug::${{ job }}"
+          echo "::debug::${{ toJson(job) }}"
 
           echo "::debug::steps context"
-          echo "::debug::${{ steps }}"
+          echo "::debug::${{ toJson(steps) }}"
 
           echo "::debug::runner context"
-          echo "::debug::${{ runner }}"
+          echo "::debug::${{ toJson(runner) }}"
 
           echo "::debug::strategy context"
-          echo "::debug::${{ strategy }}"
+          echo "::debug::${{ toJson(strategy) }}"
 
           echo "::debug::matrix context"
-          echo "::debug::${{ matrix }}"
+          echo "::debug::${{ toJson(matrix) }}"
 
           echo "::debug::needs context"
-          echo "::debug::${{ needs }}"
+          echo "::debug::${{ toJson(needs) }}"
 
           echo "::debug::Procenv"
           sudo apt -y install procenv
