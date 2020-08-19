@@ -31,18 +31,19 @@ jobs:
       - name: Add issue to issue backlog
         env:
           DEBUG: true
-          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
         run: |
             issue=${{ github.event.issue.number }}
             project_name="top-level-project"
             project_type="org"
             project_column="To do"
 
-            hub api -H 'accept: application/vnd.github.inertia-preview+json' -XGET 'orgs/{owner}/projects' -f state=open
+            GITHUB_TOKEN=${{ secrets.JODH_GITHUB_ACTION_TOKEN }} \
+              hub api -H 'accept: application/vnd.github.inertia-preview+json' -XGET 'orgs/{owner}/projects' -f state=open
 
-            kata-hub.sh \
-              add-issue \
-              "$issue" \
-              "$project_name" \
-              "$project_type" \
-              "$project_column"
+            GITHUB_TOKEN=${{ secrets.JODH_GITHUB_ACTION_TOKEN }} \
+              kata-hub.sh \
+                add-issue \
+                "$issue" \
+                "$project_name" \
+                "$project_type" \
+                "$project_column"
