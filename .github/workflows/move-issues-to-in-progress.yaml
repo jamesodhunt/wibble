@@ -4,6 +4,7 @@ on:
   pull_request:
     types:
       - opened
+      - reopened
 
 jobs:
   move-linked-issues-to-in-progress:
