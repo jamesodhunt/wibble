@@ -1,3 +1,5 @@
+# foo.
+
 name: Automatically add newly created issues to the backlog project
 
 on:
