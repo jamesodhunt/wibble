@@ -11,6 +11,12 @@ jobs:
     steps:
       - name: Show environment
         run: |
+          # FIXME: DEBUG:
+          echo "::debug::PATH"
+          echo $PATH
+
+          export PATH="/usr/local/bin:$PATH"
+
           echo "::debug::jq version:"
           jq --version
 
