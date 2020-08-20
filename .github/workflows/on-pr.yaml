@@ -1,0 +1,135 @@
+name: Show "on pr" event details
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  show-on-pr-details:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show environment
+        run: |
+          echo "::debug::jq version:"
+          jq --version
+
+          echo "::debug::event repo slug: ${{ github.repository }}"
+          echo "::debug::event repo owner: ${{ github.repository_owner }}"
+
+          echo "::debug::Issue number: ${{ github.event.issue.number }}"
+          echo "::debug::Issue url : ${{ github.event.issue.html_url }}"
+          echo "::debug::Issue title : ${{ github.event.issue.title }}"
+          echo "::debug::Issue repo name: ${{ github.event.repository.name }}"
+          echo "::debug::Issue repo URL: ${{ github.event.repository.html_url }}"
+
+          echo "::debug::Environment variables"
+          set|sort
+
+          echo "::debug::github context"
+          echo "::debug::${{ toJson(github) }}"
+
+          echo "::debug::env context"
+          echo "::debug::${{ toJson(env) }}"
+
+          echo "::debug::job context"
+          echo "::debug::${{ toJson(job) }}"
+
+          echo "::debug::steps context"
+          echo "::debug::${{ toJson(steps) }}"
+
+          echo "::debug::runner context"
+          echo "::debug::${{ toJson(runner) }}"
+
+          echo "::debug::strategy context"
+          echo "::debug::${{ toJson(strategy) }}"
+
+          echo "::debug::matrix context"
+          echo "::debug::${{ toJson(matrix) }}"
+
+          echo "::debug::needs context"
+          echo "::debug::${{ toJson(needs) }}"
+
+          #echo "::debug::Procenv"
+          #sudo apt -y install procenv
+          #procenv
+
+      - name: Install hub
+        run: |
+          HUB_ARCH="amd64"
+          HUB_VER=$(curl -sL "https://api.github.com/repos/github/hub/releases/latest" |\
+            jq -r .tag_name | sed 's/^v//')
+          curl -sL \
+            "https://github.com/github/hub/releases/download/v${HUB_VER}/hub-linux-${HUB_ARCH}-${HUB_VER}.tgz" |\
+          tar xz --strip-components=2 --wildcards '*/bin/hub' && \
+          sudo install hub /usr/local/bin
+
+      - name: Install hub extension script
+        run: |
+          # Clone into a temporary directory to avoid overwriting
+          # any existing github directory.
+          pushd $(mktemp -d) &>/dev/null
+          git clone --single-branch --depth 1 "https://github.com/jamesodhunt-org/.github" && cd .github/scripts
+          sudo install kata-hub.sh /usr/local/bin
+          popd &>/dev/null
+
+      - name: Checkout code to allow hub to communicate with the project
+        uses: actions/checkout@v2
+
+      - name: Show github stuff
+        env:
+          DEBUG: true
+          HUB_VERBOSE: true
+          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
+        run: |
+          # FIXME: DEBUG:
+          echo "::debug::GITHUB_WORKSPACE"
+          echo "$GITHUB_WORKSPACE"
+
+          # FIXME: DEBUG:
+          echo "::debug::PWD"
+          pwd
+          ls -al
+
+          # FIXME: DEBUG:
+          echo "::debug::hub"
+          command -v hub || true
+
+          # FIXME: DEBUG:
+          echo "::debug::hub api user"
+          GITHUB_TOKEN=${{ secrets.JODH_GITHUB_ACTION_TOKEN }} hub api user || true
+
+          # FIXME: DEBUG:
+          echo "::debug::hub issues"
+          hub issue || true
+
+          # FIXME: DEBUG:
+          echo "::debug::hub PRs"
+          hub pr list || true
+
+          # FIXME: DEBUG:
+          echo "::debug::git details"
+          git ls-files -v || true
+          git branch || true
+          git remote -v || true
+          git status || true
+
+          # FIXME: DEBUG:
+          echo "::debug::/usr/local/bin:"
+          sudo ls -l /usr/local/bin || true
+
+          # FIXME: DEBUG:
+          echo "::debug::linked PRs"
+          hub api -XGET search/issues -f 'q=repo:jamesodhunt-org/wibble is:issue is:open linked:pr' || true
+
+          # FIXME: DEBUG:
+          echo "::debug::linked issues"
+          hub api -XGET search/issues -f 'q=repo:jamesodhunt-org/wibble is:pr is:open linked:issue' || true
+
+          # FIXME: DEBUG:
+          echo "::debug::issues"
+          hub issue || true
+
+          echo "FIXME: hello"
+          kata-hub.sh list-issue-linked-prs || true
