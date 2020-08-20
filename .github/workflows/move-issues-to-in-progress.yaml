@@ -74,6 +74,14 @@ jobs:
           sudo ls -l /usr/local/bin || true
 
           # FIXME: DEBUG:
+          echo "::debug::linked PRs"
+          hub api -XGET search/issues -f 'q=repo:jamesodhunt-org/wibble is:issue is:open linked:pr' || true
+
+          # FIXME: DEBUG:
+          echo "::debug::linked issues"
+          hub api -XGET search/issues -f 'q=repo:jamesodhunt-org/wibble is:pr is:open linked:issue' || true
+
+          # FIXME: DEBUG:
           echo "::debug::issues"
           hub issue || true
 
