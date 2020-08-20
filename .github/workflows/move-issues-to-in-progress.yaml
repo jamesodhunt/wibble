@@ -10,6 +10,16 @@ jobs:
   move-linked-issues-to-in-progress:
     runs-on: ubuntu-latest
     steps:
+      - name: Install hub
+        run: |
+          HUB_ARCH="amd64"
+          HUB_VER=$(curl -sL "https://api.github.com/repos/github/hub/releases/latest" |\
+            jq -r .tag_name | sed 's/^v//')
+          curl -sL \
+            "https://github.com/github/hub/releases/download/v${HUB_VER}/hub-linux-${HUB_ARCH}-${HUB_VER}.tgz" |\
+          tar xz --strip-components=2 --wildcards '*/bin/hub' && \
+          sudo install hub /usr/local/bin
+
       - name: Install hub extension script
         run: |
           # Clone into a temporary directory to avoid overwriting
@@ -32,14 +42,23 @@ jobs:
           echo "::debug::GITHUB_WORKSPACE"
           echo "$GITHUB_WORKSPACE"
 
+          echo "::debug::env"
+          set|sort || true
+
           # FIXME: DEBUG:
           echo "::debug::PWD"
           pwd
           ls -al
 
           # FIXME: DEBUG:
-          echo "::debug::PATH"
+          echo "::debug::PATH: $PATH"
           echo $PATH
+
+          echo "::debug::PATH: hub config"
+          egrep "(user|protocol):" ~/.config/hub || true
+
+          echo "::debug::PATH: hub oath token length"
+          grep oauth_token: ~/.config/hub|awk '{print $2}'|wc -c
 
           export PATH="/usr/local/bin:$PATH"
 
@@ -49,15 +68,15 @@ jobs:
 
           # FIXME: DEBUG:
           echo "::debug::hub api user"
-          GITHUB_TOKEN="${{ secrets.JODH_GITHUB_ACTION_TOKEN }}" hub api user || true
+          GITHUB_TOKEN="${{ secrets.JODH_GITHUB_ACTION_TOKEN }}" /usr/local/bin/hub api user || true
 
           # FIXME: DEBUG:
           echo "::debug::hub issues"
-          hub issue || true
+          /usr/local/bin/hub issue || true
 
           # FIXME: DEBUG:
           echo "::debug::hub PRs"
-          hub pr list || true
+          /usr/local/bin/hub pr list || true
 
           # FIXME: DEBUG:
           echo "::debug::git details"
