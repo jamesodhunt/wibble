@@ -13,7 +13,7 @@ jobs:
       - name: Show environment
         run: |
           echo "::debug::jq version:"
-          jq --version
+          jq --version || true
 
           echo "::debug::event repo slug: ${{ github.repository }}"
           echo "::debug::event repo owner: ${{ github.repository_owner }}"
@@ -25,7 +25,7 @@ jobs:
           echo "::debug::Issue repo URL: ${{ github.event.repository.html_url }}"
 
           echo "::debug::Environment variables"
-          set|sort
+          set|sort || true
 
           echo "::debug::github context"
           echo "::debug::${{ toJson(github) }}"
@@ -50,10 +50,6 @@ jobs:
 
           echo "::debug::needs context"
           echo "::debug::${{ toJson(needs) }}"
-
-          #echo "::debug::Procenv"
-          #sudo apt -y install procenv
-          #procenv
 
       - name: Install hub
         run: |
