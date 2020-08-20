@@ -10,16 +10,6 @@ jobs:
   move-linked-issues-to-in-progress:
     runs-on: ubuntu-latest
     steps:
-      - name: Install hub
-        run: |
-          HUB_ARCH="amd64"
-          HUB_VER=$(curl -sL "https://api.github.com/repos/github/hub/releases/latest" |\
-            jq -r .tag_name | sed 's/^v//')
-          curl -sL \
-            "https://github.com/github/hub/releases/download/v${HUB_VER}/hub-linux-${HUB_ARCH}-${HUB_VER}.tgz" |\
-          tar xz --strip-components=2 --wildcards '*/bin/hub' && \
-          sudo install hub /usr/local/bin
-
       - name: Install hub extension script
         run: |
           # Clone into a temporary directory to avoid overwriting
