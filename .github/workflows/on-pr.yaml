@@ -10,47 +10,6 @@ jobs:
   show-on-pr-details:
     runs-on: ubuntu-latest
     steps:
-      - name: Show environment
-        run: |
-          echo "::debug::jq version:"
-          jq --version || true
-
-          echo "::debug::event repo slug: ${{ github.repository }}"
-          echo "::debug::event repo owner: ${{ github.repository_owner }}"
-
-          echo "::debug::Issue number: ${{ github.event.issue.number }}"
-          echo "::debug::Issue url : ${{ github.event.issue.html_url }}"
-          echo "::debug::Issue title : ${{ github.event.issue.title }}"
-          echo "::debug::Issue repo name: ${{ github.event.repository.name }}"
-          echo "::debug::Issue repo URL: ${{ github.event.repository.html_url }}"
-
-          echo "::debug::Environment variables"
-          set|sort || true
-
-          echo "::debug::github context"
-          echo "::debug::${{ toJson(github) }}"
-
-          echo "::debug::env context"
-          echo "::debug::${{ toJson(env) }}"
-
-          echo "::debug::job context"
-          echo "::debug::${{ toJson(job) }}"
-
-          echo "::debug::steps context"
-          echo "::debug::${{ toJson(steps) }}"
-
-          echo "::debug::runner context"
-          echo "::debug::${{ toJson(runner) }}"
-
-          echo "::debug::strategy context"
-          echo "::debug::${{ toJson(strategy) }}"
-
-          echo "::debug::matrix context"
-          echo "::debug::${{ toJson(matrix) }}"
-
-          echo "::debug::needs context"
-          echo "::debug::${{ toJson(needs) }}"
-
       - name: Install hub
         run: |
           HUB_ARCH="amd64"
