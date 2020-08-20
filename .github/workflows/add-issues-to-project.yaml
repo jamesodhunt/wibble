@@ -33,29 +33,61 @@ jobs:
 
       - name: Add issue to issue backlog
         env:
-          xDEBUG: true
+          DEBUG: true
+          HUB_VERBOSE: true
           GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
         run: |
-            # FIXME: DEBUG:
-            #echo "::debug::GITHUB_WORKSPACE"
-            #echo "$GITHUB_WORKSPACE"
+          # FIXME: DEBUG:
+          echo "::debug::GITHUB_WORKSPACE"
+          echo "$GITHUB_WORKSPACE"
 
-            # FIXME: DEBUG:
-            #echo "::debug::PWD"
-            #pwd
-            #ls -al
+          # FIXME: DEBUG:
+          echo "::debug::PWD"
+          pwd
+          ls -al
 
-            # FIXME: DEBUG:
-            #echo "::debug::hub"
-            #command -v hub || true
+          # FIXME: DEBUG:
+          echo "::debug::hub"
+          command -v hub || true
 
-            # FIXME: DEBUG:
-            #echo "::debug::/usr/local/bin:"
-            #sudo ls -l /usr/local/bin || true
+          # FIXME: DEBUG:
+          echo "::debug::hub api user"
+          hub api user || true
 
-            # FIXME: DEBUG:
-            #echo "::debug::issues"
-            #hub issue || true
+          # FIXME: DEBUG:
+          echo "::debug::hub issues"
+          hub issue || true
+
+          # FIXME: DEBUG:
+          echo "::debug::hub PRs"
+          hub pr list || true
+
+          # FIXME: DEBUG:
+          echo "::debug::git details"
+          git ls-files -v || true
+          git branch || true
+          git remote -v || true
+          git status || true
+
+          # FIXME: DEBUG:
+          echo "::debug::/usr/local/bin:"
+          sudo ls -l /usr/local/bin || true
+
+          # FIXME: DEBUG:
+          echo "::debug::linked PRs"
+          hub api -XGET search/issues -f 'q=repo:jamesodhunt-org/wibble is:issue is:open linked:pr' || true
+
+          # FIXME: DEBUG:
+          echo "::debug::linked issues"
+          hub api -XGET search/issues -f 'q=repo:jamesodhunt-org/wibble is:pr is:open linked:issue' || true
+
+          # FIXME: DEBUG:
+          echo "::debug::issues"
+          hub issue || true
+
+          echo "FIXME: hello"
+          kata-hub.sh list-issue-linked-prs || true
+
 
             issue=${{ github.event.issue.number }}
             project_name="top-level-project"
