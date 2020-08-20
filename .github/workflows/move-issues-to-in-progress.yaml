@@ -51,6 +51,14 @@ jobs:
           command -v hub || true
 
           # FIXME: DEBUG:
+          echo "::debug::hub issues"
+          hub issue || true
+
+          # FIXME: DEBUG:
+          echo "::debug::hub PRs"
+          hub pr list || true
+
+          # FIXME: DEBUG:
           echo "::debug::git details"
           git ls-files -v || true
           git branch || true
