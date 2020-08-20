@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code to allow hub to communicate with the project
         uses: actions/checkout@v2
 
-      - name: Move issue to 'In progress'
+      - name: Move issue to In progress
         env:
           DEBUG: true
           HUB_VERBOSE: true
@@ -53,7 +53,7 @@ jobs:
 
           # FIXME: DEBUG:
           echo "::debug::hub api user"
-          hub api user || true
+          GITHUB_TOKEN="${{ secrets.JODH_GITHUB_ACTION_TOKEN }}" hub api user || true
 
           # FIXME: DEBUG:
           echo "::debug::hub issues"
