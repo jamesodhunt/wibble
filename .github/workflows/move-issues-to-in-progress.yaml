@@ -77,6 +77,9 @@ jobs:
           echo "::debug::issues"
           hub issue || true
 
+          echo "FIXME: hello"
+          kata-hub.sh list-issue-linked-prs || true
+
           pr=${{ github.event.pull_request.number }}
           linked_issue_url=$(kata-hub.sh list-issue-linked-prs |\
             grep -v "^\#" |\
