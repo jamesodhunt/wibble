@@ -35,6 +35,7 @@ jobs:
       - name: Move issue to 'In progress'
         env:
           DEBUG: true
+          HUB_VERBOSE: true
           GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
         run: |
           # FIXME: DEBUG:
