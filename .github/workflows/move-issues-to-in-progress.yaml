@@ -38,6 +38,12 @@ jobs:
           ls -al
 
           # FIXME: DEBUG:
+          echo "::debug::PATH"
+          echo $PATH
+
+          export PATH="/usr/local/bin:$PATH"
+
+          # FIXME: DEBUG:
           echo "::debug::hub"
           command -v hub || true
 
