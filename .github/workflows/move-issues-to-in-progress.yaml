@@ -51,6 +51,10 @@ jobs:
           command -v hub || true
 
           # FIXME: DEBUG:
+          echo "::debug::hub api user"
+          hub api user || true
+
+          # FIXME: DEBUG:
           echo "::debug::hub issues"
           hub issue || true
 
