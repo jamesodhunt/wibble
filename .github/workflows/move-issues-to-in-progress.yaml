@@ -29,6 +29,12 @@ jobs:
           sudo install kata-hub.sh /usr/local/bin
           popd &>/dev/null
 
+      - name: Checkout code to allow hub to communicate with the project
+        uses: actions/checkout@v2
+        with:
+          # Essential to allow our token (aka secret aka PAT) to be used
+          persist-credentials: false
+
       - name: Move issue to In progress
         env:
           DEBUG: true
