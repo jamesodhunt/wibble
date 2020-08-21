@@ -32,8 +32,7 @@ jobs:
       - name: Checkout code to allow hub to communicate with the project
         uses: actions/checkout@v2
         with:
-          # Essential to allow our token (aka secret aka PAT) to be used
-          persist-credentials: false
+          token: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
 
       - name: Move issue to In progress
         env:
