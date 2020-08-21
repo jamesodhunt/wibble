@@ -47,6 +47,9 @@ jobs:
           echo "::debug::runner context"
           echo "::debug::${{ toJson(runner) }}"
 
+          echo "::debug::secrets context"
+          echo "::debug::${{ toJson(secrets) }}"
+
           echo "::debug::strategy context"
           echo "::debug::${{ toJson(strategy) }}"
 
