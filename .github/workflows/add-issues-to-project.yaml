@@ -31,7 +31,7 @@ jobs:
           popd &>/dev/null
 
       - name: Checkout code to allow hub to communicate with the project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Add issue to issue backlog
         env:
