@@ -19,6 +19,9 @@ jobs:
           tar xz --strip-components=2 --wildcards '*/bin/hub' && \
           sudo install hub /usr/local/bin
 
+      - name: Checkout code to allow hub to communicate with the project
+        uses: actions/checkout@v1
+
       - name: Stop PR being merged unless it has atleast one backport label and one forward port label
         env:
           GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }}
