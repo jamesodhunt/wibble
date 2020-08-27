@@ -37,7 +37,7 @@ jobs:
         env:
           DEBUG: true
           HUB_VERBOSE: true
-          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }}
         run: |
           # FIXME: DEBUG:
           echo "::debug::GITHUB_WORKSPACE"
