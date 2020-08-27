@@ -10,33 +10,11 @@ jobs:
   show-on-pr-details:
     runs-on: ubuntu-latest
     steps:
-      - name: Install hub
-        run: |
-          HUB_ARCH="amd64"
-          HUB_VER=$(curl -sL "https://api.github.com/repos/github/hub/releases/latest" |\
-            jq -r .tag_name | sed 's/^v//')
-          curl -sL \
-            "https://github.com/github/hub/releases/download/v${HUB_VER}/hub-linux-${HUB_ARCH}-${HUB_VER}.tgz" |\
-          tar xz --strip-components=2 --wildcards '*/bin/hub' && \
-          sudo install hub /usr/local/bin
-
-      - name: Install hub extension script
-        run: |
-          # Clone into a temporary directory to avoid overwriting
-          # any existing github directory.
-          pushd $(mktemp -d) &>/dev/null
-          git clone --single-branch --depth 1 "https://github.com/jamesodhunt-org/.github" && cd .github/scripts
-          sudo install kata-hub.sh /usr/local/bin
-          popd &>/dev/null
-
-      - name: Checkout code to allow hub to communicate with the project
-        uses: actions/checkout@v2
-
       - name: Show github stuff
         env:
           DEBUG: true
           HUB_VERBOSE: true
-          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }}
         run: |
           # FIXME: DEBUG:
           echo "::debug::GITHUB_WORKSPACE"
@@ -59,7 +37,7 @@ jobs:
 
           # FIXME: DEBUG:
           echo "::debug::hub api user"
-          GITHUB_TOKEN=${{ secrets.JODH_GITHUB_ACTION_TOKEN }} hub api user || true
+          GITHUB_TOKEN=${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }} hub api user || true
 
           # FIXME: DEBUG:
           echo "::debug::hub issues"

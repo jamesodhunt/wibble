@@ -32,15 +32,15 @@ jobs:
       - name: Checkout code to allow hub to communicate with the project
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
+          token: ${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }}
 
       - name: Move issue to In progress
         env:
           DEBUG: true
           HUB_VERBOSE: true
-          xGITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTION_TOKEN }}
+          xGITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }}
         run: |
-          export GITHUB_TOKEN="${{ secrets.JODH_GITHUB_ACTION_TOKEN }}"
+          export GITHUB_TOKEN="${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }}"
 
           # FIXME: DEBUG:
           echo "::debug::GITHUB_WORKSPACE"
@@ -72,7 +72,7 @@ jobs:
 
           # FIXME: DEBUG:
           echo "::debug::hub api user"
-          GITHUB_TOKEN="${{ secrets.JODH_GITHUB_ACTION_TOKEN }}" /usr/local/bin/hub api user || true
+          GITHUB_TOKEN="${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }}" /usr/local/bin/hub api user || true
 
           # FIXME: DEBUG:
           echo "::debug::hub issues"

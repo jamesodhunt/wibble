@@ -1,0 +1,71 @@
+name: Ensure all PRs have the required porting labels
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  check-pr-porting-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install hub
+        run: |
+          HUB_ARCH="amd64"
+          HUB_VER=$(curl -sL "https://api.github.com/repos/github/hub/releases/latest" |\
+            jq -r .tag_name | sed 's/^v//')
+          curl -sL \
+            "https://github.com/github/hub/releases/download/v${HUB_VER}/hub-linux-${HUB_ARCH}-${HUB_VER}.tgz" |\
+          tar xz --strip-components=2 --wildcards '*/bin/hub' && \
+          sudo install hub /usr/local/bin
+
+      - name: Stop PR being merged unless it has atleast one backport label and one forward port label
+        env:
+          GITHUB_TOKEN: ${{ secrets.JODH_GITHUB_ACTIONS_TOKEN }}
+          DEBUG: true
+        run: |
+          pr=${{ github.event.number }}
+
+          # Every PR must have two porting labels before it can be merged.
+          # This is to ensure it is clear that a reviewer has considered both
+          # porting directions.
+          backport_labels=("needs-backport" "no-backport-needed")
+          forward_port_labels=("needs-forward-port" "no-forward-port-needed")
+
+          pr_details=$(hub pr list -f '%I;%L%n' | grep "^${pr}" || true)
+
+          [ -z "$pr_details" ] \
+            && echo "::error::Cannot determine details for PR $pr" \
+            && exit 1
+
+          labels=$(echo "$pr_details"|cut -d';' -f2|tr ',' ' ')
+
+          [ -z "$labels" ] \
+            && echo "::error::PR $pr does not have required porting labels" \
+            && exit 1
+
+          backport_label=""
+          for label in ${backport_labels[@]}
+          do
+            echo "$labels"|grep -qw "$label" \
+              && backport_label="$label" \
+              && break
+          done
+
+          [ -z "$backport_label" ] \
+            && echo "::error::PR $pr missing a backport label (${backport_labels[@]})" \
+            && exit 1
+
+          forward_port_label=""
+          for label in ${forward_port_labels[@]}
+          do
+            echo "$labels"|grep -qw "$label" \
+              && forward_port_label="$label" \
+              && break
+          done
+
+          [ -z "$forward_port_label" ] \
+            && echo "::error::PR $pr missing a forward port label (${backport_labels[@]})" \
+            && exit 1
+
+          echo "::debug::PR $pr has required porting labels ($backport_label, $forward_port_label)"
